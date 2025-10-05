@@ -11,8 +11,8 @@ function Dashboard() {
     <div>
       <div className='flex justify-between items-center'  >
         <h2 className='font-bold text-2xl text-primary'>Dashboard</h2>
-        <Link href={'./create-new'}>
-        <Button><Plus></Plus>Criar Novo</Button>
+        <Link href={'/dashboard/create-new'}>
+        <Button className='cursor-pointer'><Plus></Plus>Criar Novo</Button>
         </Link>
       </div>
 

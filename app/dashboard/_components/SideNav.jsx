@@ -16,7 +16,7 @@ function SideNav() {
     {
       id: 2,
       name: 'Criar Novo',
-      path: '/create-new',
+      path: '/dashboard/create-new',
       icon: FileVideo
     },
     {

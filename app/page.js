@@ -5,7 +5,7 @@ export default function Home() {
   return (
     <div>
       <h2>HUDEVBR</h2>
-      <Button variant=''>Me contrate</Button>
+      <Button variant=''>Entre em contato !</Button>
     </div>
   );
 }
