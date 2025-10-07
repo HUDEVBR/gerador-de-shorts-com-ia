@@ -1,7 +1,14 @@
-import React from 'react'
+'use client'
+import React, { useState } from 'react'
 import SelectTopic from './_components/SelectTopic'
 
 function CreateNew() {
+
+  const [formData, setFormData] = useState([]);
+  const onHandleInputChange = (fieldName, fieldValue) => {
+
+  }
+
   return (
     <div>
       <div className='md:px-20 '>
