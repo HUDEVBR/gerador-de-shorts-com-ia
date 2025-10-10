@@ -27,7 +27,6 @@ return (
                 {options.map((item, index) => (
                     <SelectItem value={item} key={index}>{item}</SelectItem>
                 ))}
-
             </SelectContent>
         </Select>
 
