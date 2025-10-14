@@ -10,7 +10,7 @@ import {
 import { Textarea } from '@/components/ui/textarea'
 
 function SelectTopic({onUserSelect}) {
-    const options = ['Prompt customizado', 'Story Aleatório de IA', 'Fatos Históricos', 'Story Assustador', 'Story para dormir', 'Motivacional', 'Fatos Engrçados']
+    const options = ['Prompt customizado', 'Story Aleatório de IA', 'Fatos Históricos', 'Story Assustador', 'Story para dormir', 'Motivacional', 'Fatos Engraçados']
     const [selectedOption, setSelectedOption] = useState();
 return (
     <div>
@@ -18,7 +18,7 @@ return (
         <p className='text-gray-500'>Qual é o assunto do seu vídeo ?</p>
         <Select onValueChange={(value) => {
             setSelectedOption(value)
-            value!='Prompt customizado' && onUserSelect('Tópico', value)
+            value!='Prompt customizado' && onUserSelect('topic', value)
         }}>
             <SelectTrigger className="w-full mt-2 p-6 text-lg">
                 <SelectValue placeholder="Tipo de Conteúdo" />
@@ -32,7 +32,7 @@ return (
 
         {selectedOption == 'Prompt customizado' &&
             <Textarea className='mt-3'
-            onChange={(e) => onUserSelect('Tópico', e.target.value)}
+            onChange={(e) => onUserSelect('topic', e.target.value)}
             placeholder='Escreva o prompt que você quer gerar do seu video' />
         }
     </div>

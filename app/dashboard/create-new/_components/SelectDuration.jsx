@@ -13,7 +13,7 @@ function SelectDuration({onUserSelect}) {
       <h2 className='font-bold text-2xl text-primary'>Duração</h2>
         <p className='text-gray-500'>Selecione a duração do seu vídeo</p>
         <Select onValueChange={(value) => {
-            value!='Prompt customizado' && onUserSelect('Duração', value)
+            value!='Prompt customizado' && onUserSelect('duration', value)
         }}>
             <SelectTrigger className="w-full mt-2 p-6 text-lg">
                 <SelectValue placeholder="Tempo de duração" />

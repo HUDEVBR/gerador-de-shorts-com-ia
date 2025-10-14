@@ -12,13 +12,16 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^6.32.2",
+    "@google/genai": "^1.24.0",
     "@neondatabase/serverless": "^1.0.1",
     "@radix-ui/react-select": "^2.2.6",
     "@radix-ui/react-slot": "^1.2.3",
+    "axios": "^1.12.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "drizzle-orm": "^0.44.5",
     "lucide-react": "^0.544.0",
+    "mime": "^4.1.0",
     "next": "15.5.3",
     "react": "19.1.0",
     "react-dom": "19.1.0",
@@ -27,6 +30,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/node": "^24.7.2",
     "drizzle-kit": "^0.31.4",
     "tailwindcss": "^4",
     "tw-animate-css": "^1.3.8"
