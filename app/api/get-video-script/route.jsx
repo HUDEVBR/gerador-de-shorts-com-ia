@@ -1,16 +1,19 @@
-import { generativeVideoPrompt } from "@/configs/AiModel"
+import { generatePrompt } from "@/configs/AiModel";
 import { NextResponse } from "next/server";
 
+
 export async function POST(req) {
-    try {
-        const { prompt } = await req.json()
-        console.log(prompt)
+  try {
+    const { prompt } = await req.json();
 
-        const result = await generativeVideoPrompt.sendMessage(prompt);
-        console.log(result.response.text());
+    const result = await generatePrompt(prompt);
 
-        return NextResponse.json({'result': JSON.parse(result.response())})
-    } catch (e) {
-        return NextResponse.json({'Error:': e})
-    }
+    const text =
+      result?.candidates?.[0]?.content?.parts?.[0]?.text ?? "Sem resposta";
+
+    return NextResponse.json({ text });
+  } catch (e) {
+    console.error("API ERROR:", e);
+    return NextResponse.json({ error: e.message }, { status: 500 });
+  }
 }
