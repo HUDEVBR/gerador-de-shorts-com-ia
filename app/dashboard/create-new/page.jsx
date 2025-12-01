@@ -5,10 +5,13 @@ import SelectStyle from './_components/SelectStyle';
 import SelectDuration from './_components/SelectDuration';
 import { Button } from '@/components/ui/button';
 import axios from 'axios';
+import CustomLoading from './_components/CustomLoading';
 
 function CreateNew() {
 
   const [formData, setFormData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [videoScriipt, setVideoScript] = useState();
 
   const onHandleInputChange = (fieldName, fieldValue) => {
     console.log(fieldName, fieldValue)
@@ -24,18 +27,20 @@ function CreateNew() {
   }
 
   // Pega o script do vídeo gerado pela IA
-  const GetVideoScript = async() => {
+  const GetVideoScript = async () => {
+    setLoading(true)
     const prompt = 'Escreva um script que gere ' + formData.duration + ' um vídeo do tópico : ' + formData.topic + ' junto com o prompt de imagem de IA no estilo ' + formData.imageStyle + ' para cada cena e me dê o resultado em JSON com o imagePrompt and ContentText as field, sem textos simples'
     console.log(prompt)
     const result = await axios.post('/api/get-video-script', {
-      prompt:prompt
-    }).then(res => {
-      console.log(res.data)
-    })
+      prompt: prompt
+    }).then(resp => {
+      console.log(resp.data.result);
+      setVideoScript(resp.data.result)
+    });
+    setLoading(false);
   }
 
   return (
-    <div>
       <div className='md:px-20 '>
         <h2 className='font-bold text-4xl text-primary text-center'>Crie seu novo shorts !</h2>
         <div className='mt-10 shadow-md p-10'>
@@ -48,8 +53,8 @@ function CreateNew() {
           {/* Create Button */}
             <Button className='mt-10 w-full' onClick={onCreateClickHandler}>Criar Shorts</Button>
         </div>
+        <CustomLoading loading={loading} />
       </div>
-    </div>
   )
 }
 
