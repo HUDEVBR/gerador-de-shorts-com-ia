@@ -11,7 +11,7 @@ function CreateNew() {
 
   const [formData, setFormData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [videoScriipt, setVideoScript] = useState();
+  const [videoScript, setVideoScript] = useState();
 
   const onHandleInputChange = (fieldName, fieldValue) => {
     console.log(fieldName, fieldValue)
@@ -35,9 +35,20 @@ function CreateNew() {
       prompt: prompt
     }).then(resp => {
       console.log(resp.data.result);
-      setVideoScript(resp.data.result)
+      setVideoScript(resp.data.result);
+      GenerateAudioFile(resp.data.result);
     });
     setLoading(false);
+  }
+
+  const GenerateAudioFile = async (videoScriptData) => {
+    let script = '';
+    videoScriptData.forEach(item => {
+      script = script + item.contentText + ' ';
+    })
+
+    console.log(script);
+    
   }
 
   return (

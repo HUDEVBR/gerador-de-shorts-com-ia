@@ -12,26 +12,22 @@ export async function generatePrompt(prompt: string) {
         role: 'user',
         parts: [
           {
-            text:`Sua tarefa: gerar cenas em JSON puro.
+            text:
+`
+      Gere uma lista em JSON puro, SEM markdown, SEM explicações,
+      no seguinte formato:
 
-Regras obrigatórias:
+      [
+        {
+          "time": "0-5 seconds",
+          "imagePrompt": "...",
+          "contentText": "..."
+        }
+      ]
 
-- Responda SOMENTE com um JSON válido.
-- Não inclua explicações.
-- Não inclua texto fora do JSON.
-- Não inclua markdown.
-- O JSON deve ser um array de objetos assim:
-  [
-    {
-      "time": "0-5 seconds",
-      "imagePrompt": "...",
-      "contentText": "..."
-    }
-  ]
-
-Agora gere o JSON baseado nisso:
-
-${prompt}`
+      Agora gere o JSON baseado no meu prompt:
+      ${prompt}
+    `
           }
       ],
     },
