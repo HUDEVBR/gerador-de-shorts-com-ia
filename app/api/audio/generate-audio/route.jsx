@@ -1,4 +1,6 @@
 import textToSpeech from '@google-cloud/text-to-speech';
+import fs from 'fs';
+import util from 'util';
 import { NextResponse } from 'next/server';
 
 const client = new textToSpeech.TextToSpeechClient({
@@ -7,7 +9,6 @@ const client = new textToSpeech.TextToSpeechClient({
 
 export async function POST(req) {
     const { text, id } = await req.json();
-
 
     const request = {
         input: { text: text },
@@ -19,14 +20,10 @@ export async function POST(req) {
 
     // Realiza a solicitação de texto para fala
     const [response] = await client.synthesizeSpeech(request);
-
-    
-    //const outputPath = "/tmp/output.mp3";
-    
     // Escreve o binário do audío em um arquivo local
     const writeFile = util.promisify(fs.writeFile);
     await writeFile('output.mp3', response.audioContent, 'binary');
     console.log('Conteúdo do aúdio salvo em : output.mp3');
 
-    return NextResponse.json({ Result: 'Sucsess'});
+    return NextResponse.json({ Result: 'Success'});
 }

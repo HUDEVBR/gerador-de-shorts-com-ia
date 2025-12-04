@@ -6,6 +6,9 @@ import SelectDuration from './_components/SelectDuration';
 import { Button } from '@/components/ui/button';
 import axios from 'axios';
 import CustomLoading from './_components/CustomLoading';
+import { v4 as uuidv4 } from 'uuid';
+
+const scriptData = 'Era uma vez, em uma pequena vila cercada por montanhas majestosas, vivia uma jovem chamada Luna. Ela era conhecida por sua curiosidade insaciável e seu espírito aventureiro. Todos os dias, Luna explorava as florestas ao redor da vila, sonhando com as maravilhas que o mundo além das montanhas poderia oferecer. Um dia, enquanto caminhava por uma trilha desconhecida, Luna encontrou um mapa antigo escondido sob uma pedra. O mapa mostrava o caminho para um tesouro perdido, escondido em uma caverna secreta nas profundezas das montanhas. Determinada a encontrar o tesouro, Luna embarcou em uma jornada cheia de desafios e descobertas. Ao longo do caminho, ela fez novos amigos, enfrentou perigos inesperados e aprendeu lições valiosas sobre coragem e amizade. Finalmente, após muitos dias de viagem, Luna chegou à caverna e encontrou o tesouro - não ouro ou joias, mas um livro mágico cheio de histórias incríveis de lugares distantes. Com o coração cheio de alegria, Luna retornou à sua vila, pronta para compartilhar suas aventuras e inspirar outros a seguir seus próprios sonhos.'
 
 function CreateNew() {
 
@@ -23,7 +26,8 @@ function CreateNew() {
   }
 
   const onCreateClickHandler = () => {
-    GetVideoScript();
+    //GetVideoScript();
+    GenerateAudioFile(scriptData);
   }
 
   // Pega o script do vídeo gerado pela IA
@@ -34,7 +38,6 @@ function CreateNew() {
     const result = await axios.post('/api/get-video-script', {
       prompt: prompt
     }).then(resp => {
-      console.log(resp.data.result);
       setVideoScript(resp.data.result);
       GenerateAudioFile(resp.data.result);
     });
@@ -42,13 +45,21 @@ function CreateNew() {
   }
 
   const GenerateAudioFile = async (videoScriptData) => {
-    let script = '';
-    videoScriptData.forEach(item => {
-      script = script + item.contentText + ' ';
-    })
-
+    //setLoading(true);
+    let script = ' ';
+    const id = uuidv4();
+ /*    videoScriptData.forEach(item => {
+      script = script+item.contentText + ' ';
+    }) */
     console.log(script);
-    
+
+    await axios.post('/api/audio/generate-audio', {
+      text: videoScriptData,
+      id: id
+    }).then(resp => {
+      console.log(resp.data);
+    })
+    //setLoading(false);
   }
 
   return (
