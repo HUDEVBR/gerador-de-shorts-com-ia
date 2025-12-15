@@ -16,7 +16,8 @@ function CreateNew() {
   const [loading, setLoading] = useState(false);
   const [videoScript, setVideoScript] = useState();
   const [audioFileUrl, setAudioFileUrl] = useState();
-
+  const [captions, setCaptions] = useState();
+  const [imageList, setImageList] = useState()
   const onHandleInputChange = (fieldName, fieldValue) => {
     console.log(fieldName, fieldValue)
 
@@ -27,9 +28,9 @@ function CreateNew() {
   }
 
   const onCreateClickHandler = () => {
-    //GetVideoScript();
+    GetVideoScript();
     //GenerateAudioFile(scriptData);
-    GenerateAudioCaption(FILEURL);
+    //GenerateAudioCaption(FILEURL);
   }
 
   // Pega o script do vídeo gerado pela IA
@@ -40,8 +41,9 @@ function CreateNew() {
     const result = await axios.post('/api/get-video-script', {
       prompt: prompt
     }).then(resp => {
+      console.log("EXE")
       setVideoScript(resp.data.result);
-      GenerateAudioFile(resp.data.result);
+      resp.data.result&&GenerateAudioFile(resp.data.result);
     });
     setLoading(false);
   }
@@ -50,11 +52,16 @@ const GenerateAudioFile = async (videoScriptData) => {
   setLoading(true);
   let script = '';
   const id = uuidv4();
+  videoScriptData.forEach(item => {
+    script += script + item.ContentText + ' ';
+  });
+
   await axios.post('/api/audio/generate-audio', {
     text: videoScriptData,
     id: id
   }).then(resp => {
     setAudioFileUrl(resp.data.result);
+    resp.data.result&&GenerateAudioCaption(resp.data.result);
   });
 
   setLoading(false);
@@ -67,10 +74,24 @@ const GenerateAudioCaption = async (fileUrl) => {
     audioFileUrl: fileUrl
   }).then(resp => {
     console.log(resp.data.result);
+    setCaptions(resp?.data?.result);
   })
+  
+  console.log(videoScript, captions, audioFileUrl)
+}
 
+  const GenerateImage = () => {
+  
+    videoScript.forEach(async(element) => {
+      await axios.post('/api/image/generate-image', {
+        prompt: element.imagePrompt
+      }).then(resp => {
+        console.log(resp.data.result);
+      })
+    })
   setLoading(false)
 }
+
 
   return (
       <div className='md:px-20 '>
