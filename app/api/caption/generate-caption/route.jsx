@@ -2,6 +2,8 @@ import { AssemblyAI } from "assemblyai";
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
+    console.log('🔥 API generate-caption CHAMADA');
+
     try {
         const { audioFileUrl } = await req.json();
 
@@ -15,6 +17,8 @@ export async function POST(req) {
         const params = {
             audio: audioFile,
             speech_models: ["universal"],
+            language_code: "pt"
+
         };
 
         const transcript = await client.transcripts.transcribe(params);

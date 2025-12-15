@@ -9,7 +9,7 @@ import CustomLoading from './_components/CustomLoading';
 import { v4 as uuidv4 } from 'uuid';
 
 const scriptData = 'Era uma vez, em uma pequena vila cercada por montanhas majestosas, vivia uma jovem chamada Luna. Ela era conhecida por sua curiosidade insaciável e seu espírito aventureiro. Todos os dias, Luna explorava as florestas ao redor da vila, sonhando com as maravilhas que o mundo além das montanhas poderia oferecer. Um dia, enquanto caminhava por uma trilha desconhecida, Luna encontrou um mapa antigo escondido sob uma pedra. O mapa mostrava o caminho para um tesouro perdido, escondido em uma caverna secreta nas profundezas das montanhas. Determinada a encontrar o tesouro, Luna embarcou em uma jornada cheia de desafios e descobertas. Ao longo do caminho, ela fez novos amigos, enfrentou perigos inesperados e aprendeu lições valiosas sobre coragem e amizade. Finalmente, após muitos dias de viagem, Luna chegou à caverna e encontrou o tesouro - não ouro ou joias, mas um livro mágico cheio de histórias incríveis de lugares distantes. Com o coração cheio de alegria, Luna retornou à sua vila, pronta para compartilhar suas aventuras e inspirar outros a seguir seus próprios sonhos.'
-const FILEURL = 'https://firebasestorage.googleapis.com/v0/b/projetos-536cd.firebasestorage.app/o/arquivos-shorts-de-ai%2F8537ea65-9fee-4ae4-a73d-2588001388c6.mp3?alt=media&token=43c1c552-26fd-4352-92e0-533460df84ab'
+const FILEURL = 'https://firebasestorage.googleapis.com/v0/b/projetos-536cd.firebasestorage.app/o/arquivos-shorts-de-ai%2F11d8aa7a-ade2-4584-8949-ed0e6cd7e1fc.mp3?alt=media&token=1af6ed91-e03d-4c09-be1d-ada635334cac'
 function CreateNew() {
 
   const [formData, setFormData] = useState([]);
@@ -48,32 +48,28 @@ function CreateNew() {
 
 const GenerateAudioFile = async (videoScriptData) => {
   setLoading(true);
-  let script = ' ';
+  let script = '';
   const id = uuidv4();
-  // videoScriptData.forEach(item => {
-  // script += script + item.ContentText + ' ';
-  //  });
-  console.log(script);
   await axios.post('/api/audio/generate-audio', {
     text: videoScriptData,
     id: id
   }).then(resp => {
-    console.log(resp.data);
     setAudioFileUrl(resp.data.result);
-  })
+  });
+
   setLoading(false);
-}
+};
 
-  const GenerateAudioCaption = async (fileUrl) => {
-    setLoading(true);
+const GenerateAudioCaption = async (fileUrl) => {
+  setLoading(true);
 
-    await axios.post('/api/caption/generate-caption', {
-      audioFileUrl: fileUrl
-    }).then(resp => {
-      console.log(resp.data.result);
-    })
+  await axios.post('/api/caption/generate-caption', {
+    audioFileUrl: fileUrl
+  }).then(resp => {
+    console.log(resp.data.result);
+  })
 
-    setLoading(false)
+  setLoading(false)
 }
 
   return (
