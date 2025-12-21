@@ -1,24 +1,42 @@
 import { NextResponse } from "next/server";
-import Replicate from "replicate";
+
 export async function POST(req) {
+  try {
+    const { prompt } = await req.json();
+
+    // chamada para a API da Pixazo
+    const response = await fetch(
+      "https://gateway.pixazo.ai/flux-1-schnell/v1/getData",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": "no-cache",
+          "Ocp-Apim-Subscription-Key": process.env.PIXAZO_KEY,
+        },
+        body: JSON.stringify({
+          prompt,
+          num_steps: 4,
+          seed: 15,
+          height: 512,
+          width: 512,
+        }),
+      }
+    );
+
+    // Pega o texto antes de tentar json()
+    const raw = await response.text();
+
+    // Se não for JSON → erro da API
+    let result;
     try {
-        const { prompt } = await req.json();
-        const replicate = new Replicate({
-            auth: process.env.REPLICATE_API_TOKEN,
-        });
-
-        const input = {
-            prompt: prompt,
-            height: 1280,
-            width: 1024,
-            num_outputs: 1,
-        };
-
-        const output = await replicate.run("bytedance/sdxl-lightning-4step:6f7a773af6fc3e8de9d5a3c00be77c17308914bf67772726aff83496ba1e3bbe", { input });
-        console.log(output[0].url());
-        return NextResponse.json({'result':output[0]})
-        // => ["https://replicate.delivery/.../output_0.png"]
-    } catch (e) {
-        
+      result = JSON.parse(raw);
+    } catch (err) {
+      throw new Error("Pixazo returned non json: " + raw.slice(0, 80));
     }
+
+    return NextResponse.json({ result: result.output });
+  } catch (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
 }
