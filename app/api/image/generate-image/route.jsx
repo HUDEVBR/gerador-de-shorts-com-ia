@@ -1,4 +1,7 @@
 import { NextResponse } from "next/server";
+import axios from "axios";
+import { storage } from "@/configs/FirebaseConfig";
+import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
 
 export async function POST(req) {
   try {
@@ -24,10 +27,10 @@ export async function POST(req) {
       }
     );
 
-    // Pega o texto antes de tentar json()
     const raw = await response.text();
 
-    // Se não for JSON → erro da API
+    console.log("PIXAZO RAW RESPONSE >>>", raw);
+
     let result;
     try {
       result = JSON.parse(raw);
@@ -35,8 +38,35 @@ export async function POST(req) {
       throw new Error("Pixazo returned non json: " + raw.slice(0, 80));
     }
 
-    return NextResponse.json({ result: result.output });
+    if (!result.output) {
+      throw new Error("Pixazo didn't return output URL");
+    }
+
+    // pega imagem e transforma pra base64
+    const res = await axios.get(result.output, {
+      responseType: "arraybuffer",
+    });
+
+    const imageResponse = await axios.get(result.output, {
+      responseType: "arraybuffer",
+    });
+
+    const imageBuffer = Buffer.from(imageResponse.data);
+
+    // salva no Firebase
+    const fileName = `arquivos-shorts-de-ai/${Date.now()}.png`;
+    const storageRef = ref(storage, fileName);
+
+    await uploadBytes(storageRef, imageBuffer, {
+      contentType: "image/png",
+    });
+
+    // gera URL pública
+    const downloadUrl = await getDownloadURL(storageRef);
+
+    return NextResponse.json({ result: downloadUrl });
   } catch (error) {
+    console.log("Erro ao gerar/salvar imagem:", error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
